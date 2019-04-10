@@ -1,0 +1,8 @@
+# Logs
+
+# Config
+.env
+
+# Misc
+.idea
+.DS_Store
