@@ -3,11 +3,12 @@ package models
 import (
 	"fmt"
 	"github.com/featherr-engineering/rest-api/config"
-	"github.com/satori/go.uuid"
-	"time"
-
+	"github.com/getsentry/raven-go"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 var db *gorm.DB
@@ -28,7 +29,8 @@ func init() {
 
 	conn, err := gorm.Open(dbType, dbUri)
 	if err != nil {
-		fmt.Print(err)
+		raven.CaptureErrorAndWait(err, nil)
+		log.WithFields(log.Fields{"Err": err}).Error("Could not connect to database")
 	}
 
 	db = conn

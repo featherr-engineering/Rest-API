@@ -2,16 +2,17 @@ package config
 
 import (
 	"github.com/caarlos0/env"
-	"github.com/go-playground/log"
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 )
 
 type Config struct {
-	AppName   string `env:"APP_NAME" envDefault:"featherr"`
-	AppEnv    string `env:"APP_ENV" envDefault:"local"`
-	AppDebug  string `env:"APP_DEBUG" envDefault:"true"`
-	AppPort   string `env:"APP_PORT" envDefault:"8000"`
-	AppDomain string `env:"APP_DOMAIN" envDefault:"localhost"`
+	AppName    string `env:"APP_NAME" envDefault:"featherr"`
+	AppEnv     string `env:"APP_ENV" envDefault:"local"`
+	AppDebug   string `env:"APP_DEBUG" envDefault:"true"`
+	AppPort    string `env:"APP_PORT" envDefault:"8000"`
+	AppDomain  string `env:"APP_DOMAIN" envDefault:"localhost"`
+	AppRelease string `env:"APP_RELEASE" envDefault:"0.1.0"`
 
 	DBName string `env:"DB_NAME" envDefault:"featherr_test"`
 	DBPass string `env:"DB_PASS" envDefault:""`
@@ -40,7 +41,7 @@ func init() {
 	cfg = &Config{}
 
 	if err := env.Parse(cfg); err != nil {
-		log.WithFields(log.F("error", err)).Warn("Errors Parsing Configuration")
+		log.WithFields(log.Fields{"Error": err}).Warn("Errors Parsing Configuration")
 	}
 
 	return

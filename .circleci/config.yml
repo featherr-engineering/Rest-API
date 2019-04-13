@@ -21,7 +21,7 @@ jobs:
           MYSQL_DATABASE: featherr_test
 
     working_directory: /go/src/github.com/featherr-engineering/rest-api
-
+d
     steps:
       - checkout
       - run:
