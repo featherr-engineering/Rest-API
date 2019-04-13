@@ -1,6 +1,6 @@
 version: 2 # use CircleCI 2.0
 jobs: # basic units of work in a run
-  build: # runs not using Workflows must have a `build` job as entry point
+  Init-Build:
     docker: # run the steps with Docker
       # CircleCI Go images available at: https://hub.docker.com/r/circleci/golang/
       - image: circleci/golang:1.12 #
@@ -23,14 +23,31 @@ jobs: # basic units of work in a run
 
       - run: go get -u github.com/golang/dep/cmd/dep
       - run:
-          name: run build
+          name: Run Build
           command: |
             dep ensure
             go build -v
       - run:
-          name: run tests
+          name: Run Tests
           command: |
             go fmt ./...
             go vet ./...
             go test -v ./tests
+  Deploy-Build:
+    - run:
+        name: Deploy Buid
+        command: |
+          echo 'Hello World!'
+          echo 'This is the delivery pipeline'
+
+
+worksflow:
+  version: 2
+  Build_WorkFlow:
+    jobs:
+      - Init-Build
+      - Deploy-Build:
+          requires:
+            - Hold-For-Approval
+
 
