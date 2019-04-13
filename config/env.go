@@ -13,8 +13,8 @@ type Config struct {
 	AppPort   string `env:"APP_PORT" envDefault:"8000"`
 	AppDomain string `env:"APP_DOMAIN" envDefault:"localhost"`
 
-	DBName string `env:"DB_NAME" envDefault:"localhost"`
-	DBPass string `env:"DB_PASS" envDefault:"test"`
+	DBName string `env:"DB_NAME" envDefault:"featherr_test"`
+	DBPass string `env:"DB_PASS" envDefault:""`
 	DBUser string `env:"DB_USER" envDefault:"root"`
 	DBType string `env:"DB_TYPE" envDefault:"mysql"`
 	DBHost string `env:"DB_HOST" envDefault:"localhost"`
