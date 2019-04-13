@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"github.com/featherr-engineering/rest-api/models"
 	u "github.com/featherr-engineering/rest-api/utils"
+	"github.com/getsentry/raven-go"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -12,6 +14,8 @@ var CreateUser = func(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user) //decode the request body into struct and failed if any error occur
 	if err != nil {
+		raven.CaptureErrorAndWait(err, nil)
+		log.WithFields(log.Fields{"Err": err}).Error("Could not parse request body as json")
 		u.Respond(w, u.Message(http.StatusBadRequest, "Invalid request"))
 		return
 	}
@@ -32,6 +36,8 @@ var Authenticate = func(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user) //decode the request body into struct and failed if any error occur
 	if err != nil {
+		raven.CaptureErrorAndWait(err, nil)
+		log.WithFields(log.Fields{"Err": err}).Error("Could not parse request body as json")
 		u.Respond(w, u.Message(http.StatusBadRequest, "Invalid request"))
 		return
 	}

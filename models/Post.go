@@ -1,8 +1,10 @@
 package models
 
 import (
-	"fmt"
 	u "github.com/featherr-engineering/rest-api/utils"
+	"github.com/getsentry/raven-go"
+	"github.com/jinzhu/gorm"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -87,8 +89,9 @@ func GetPosts() []*Post {
 	posts := make([]*Post, 0)
 
 	err := GetDB().Table("posts").Preload("User").Order("LOG10(ABS(votes_count) + 1) * SIGN(votes_count) + (UNIX_TIMESTAMP(created_at)/300000) desc", true).Limit(100).Find(&posts).Error
-	if err != nil {
-		fmt.Println(err)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		raven.CaptureErrorAndWait(err, nil)
+		log.WithFields(log.Fields{"Err": err}).Error("Could not create post")
 		return nil
 	}
 

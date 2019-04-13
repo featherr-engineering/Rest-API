@@ -1,8 +1,10 @@
 package models
 
 import (
-	"fmt"
 	u "github.com/featherr-engineering/rest-api/utils"
+	"github.com/getsentry/raven-go"
+	"github.com/jinzhu/gorm"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -52,8 +54,9 @@ func GetVotes() []*Vote {
 	votes := make([]*Vote, 0)
 
 	err := GetDB().Table("votes").Preload("User").Find(&votes).Error
-	if err != nil {
-		fmt.Println(err)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		raven.CaptureErrorAndWait(err, nil)
+		log.WithFields(log.Fields{"Err": err}).Error("Could not get vote")
 		return nil
 	}
 
