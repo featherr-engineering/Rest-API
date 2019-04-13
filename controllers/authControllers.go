@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+//Sign Up
 var CreateUser = func(w http.ResponseWriter, r *http.Request) {
 
 	user := &models.User{}
@@ -31,6 +32,7 @@ var CreateUser = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
+//Login
 var Authenticate = func(w http.ResponseWriter, r *http.Request) {
 
 	user := &models.User{}
