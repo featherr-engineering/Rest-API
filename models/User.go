@@ -1,25 +1,25 @@
 package models
 
 import (
+	"github.com/abdullahi/feather-backend/config"
 	u "github.com/abdullahi/feather-backend/utils"
-	"os"
+	"net/http"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
-	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 //a struct to rep user
 type User struct {
 	GormModel
-	Username     string    `json:"username"`
-	Email        string    `json:"email"`
-	Password     string    `json:"password"`
-	Subscription string    `json:"subscription"`
-	Image        string    `json:"image"`
-	FcmToken     string    `gorm:"column:fcmToken"`
+	Username      string `json:"username"`
+	Email         string `json:"email"`
+	Password      string `json:"password"`
+	Subscriptions string `json:"subscriptions"`
+	Image         string `json:"image"`
+	FcmToken      string `json:"fcmToken"`
 }
 
 /*
@@ -30,103 +30,109 @@ type Token struct {
 	jwt.StandardClaims
 }
 
-func (User) TableName() string {
-	return "user"
-}
+var cfg = config.GetConfig()
 
-func (user *User) BeforeCreate(scope *gorm.Scope) error {
-	u1 := uuid.Must(uuid.NewV4())
-	err := scope.SetColumn("ID", u1.String())
+func (user *User) Validate() *u.APIError {
+	Api := &u.APIError{
+		Code: http.StatusUnprocessableEntity,
+	}
 
-	return err
-}
-
-func (user *User) Validate() (map[string]interface{}, bool) {
 	if !strings.Contains(user.Email, "@") {
-		return u.Message(false, "Email address is required"), false
+		Api.Message = "Email address is required"
+		return Api
 	}
 
 	if len(user.Password) < 6 {
-		return u.Message(false, "Password is required"), false
+		Api.Message = "Password is required"
+		return Api
 	}
 
 	temp := &User{}
 
-	err := GetDB().Table("user").Where("email = ?", user.Email).First(temp).Error
+	err := GetDB().Table("users").Where("email = ?", user.Email).Or("username = ?", user.Username).First(temp).Error
+
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return u.Message(false, "Connection error. Please retry"), false
+		Api.Message = "Connection error. Please retry"
+		return Api
 	}
 
-	if temp.Email != "" {
-		return u.Message(false, "Email address already in use by another user."), false
+	if temp.Username != "" && temp.Username == user.Username {
+		Api.Message = "Username is already in use by another user."
+		return Api
 	}
 
-	if temp.Username != "" {
-		return u.Message(false, "Username is already in use by another user."), false
+	if temp.Email != "" && temp.Email == user.Email {
+		Api.Message = "Email address already in use by another user."
+		return Api
 	}
 
-	return u.Message(false, "Requirement passed"), true
+	return nil
 }
 
 func (user *User) Create() map[string]interface{} {
-
-	if resp, ok := user.Validate(); !ok {
-		return resp
-	}
-
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	user.Password = string(hashedPassword)
 
-	GetDB().Create(user)
+	err := GetDB().Create(user).Error
+	if err != nil {
+		return u.Message(http.StatusBadRequest, "Could not create user")
+	}
 
 	//Create new JWT token for the newly registered account
 	tk := &Token{UserId: user.ID}
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
-	tokenString, _ := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	tokenString, _ := token.SignedString([]byte(cfg.JWTSecret))
 	//user.Token = tokenString
 
 	user.Password = "" //delete password
 
-	response := u.Message(true, "User has been created")
-	response["user"] = user
-	response["token"] = tokenString
+	response := u.Message(http.StatusOK, "User has been created")
+	response["data"] = map[string]interface{}{
+		"user":  user,
+		"token": tokenString,
+	}
+
 	return response
 }
 
 func Login(email, password string) map[string]interface{} {
 
 	user := &User{}
-	err := GetDB().Table("user").Where("email = ?", email).First(user).Error
+	err := GetDB().Table("users").Where("email = ?", email).First(user).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return u.Message(false, "Email address not found")
+			return u.Message(http.StatusUnprocessableEntity, "Email address not found")
 		}
-		return u.Message(false, "Connection error. Please retry")
+		return u.Message(http.StatusUnprocessableEntity, "Connection error. Please retry")
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
-		return u.Message(false, "Invalid login credentials. Please try again")
+		return u.Message(http.StatusUnprocessableEntity, "Invalid login credentials. Please try again")
 	}
+
 	//Worked! Logged In
 	user.Password = ""
 
 	//Create JWT token
 	tk := &Token{UserId: user.ID}
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
-	tokenString, _ := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	tokenString, _ := token.SignedString([]byte(cfg.JWTSecret))
 	//user.Token = tokenString //Store the token in the response
 
-	resp := u.Message(true, "Logged In")
-	resp["user"] = user
-	resp["token"] = tokenString
+	resp := u.Message(http.StatusOK, "Logged In")
+	resp["data"] = map[string]interface{}{
+		"user":  user,
+		"token": tokenString,
+	}
+
 	return resp
 }
 
 func GetUser(u uint) *User {
 
 	user := &User{}
-	GetDB().Table("user").Where("id = ?", u).First(user)
+	GetDB().Table("users").Where("id = ?", u).First(user)
 	if user.Email == "" { //User not found!
 		return nil
 	}
