@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-//Get all post comments
+//GetComments of post
 var GetComments = func(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
@@ -34,7 +34,7 @@ var GetComments = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-//Create one comment record
+//CreateComment (new comment record)
 var CreateComment = func(w http.ResponseWriter, r *http.Request) {
 	token := r.Context().Value("token").(*models.Token)
 	id := token.UserId
