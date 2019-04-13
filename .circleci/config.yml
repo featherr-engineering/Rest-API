@@ -1,8 +1,7 @@
-version: 2 # use CircleCI 2.0
-jobs: # basic units of work in a run
+version: 2.0
+jobs:
   Init-Build:
-    docker: # run the steps with Docker
-      # CircleCI Go images available at: https://hub.docker.com/r/circleci/golang/
+    docker:
       - image: circleci/golang:1.12 #
       - image: tkuchiki/delayed-mysql
         environment:
@@ -11,14 +10,12 @@ jobs: # basic units of work in a run
           MYSQL_ROOT_PASSWORD: ''
           MYSQL_DATABASE: featherr_test
 
-    # directory where steps are run. Path must conform to the Go Workspace requirements
     working_directory: /go/src/github.com/featherr-engineering/rest-api
 
-    steps: # steps that comprise the `build` job
-      - checkout # check out source code to working directory
+    steps:
+      - checkout
       - run:
           name: Wait for DB
-          # preinstalled in circleci/* docker image
           command: dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
 
       - run: go get -u github.com/golang/dep/cmd/dep
@@ -33,21 +30,25 @@ jobs: # basic units of work in a run
             go fmt ./...
             go vet ./...
             go test -v ./tests
-  Deploy-Build:
-    - run:
-        name: Deploy Buid
-        command: |
-          echo 'Hello World!'
-          echo 'This is the delivery pipeline'
+  Now-Complete:
+    docker:
+      - image: circleci/golang:1.12
+    steps:
+      - run:
+          name: Approval Complete
+          command: |
+            echo 'Do work once the approval has completed'
 
 
 worksflow:
   version: 2
-  Build_WorkFlow:
+  build:
     jobs:
       - Init-Build
-      - Deploy-Build:
+      - Now-Complete:
           requires:
             - Hold-For-Approval
+
+
 
 
