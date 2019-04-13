@@ -3,24 +3,24 @@ package services
 import (
 	"context"
 	"fmt"
+	"github.com/abdullahi/feather-backend/config"
 	"github.com/abdullahi/feather-backend/models"
 	u "github.com/abdullahi/feather-backend/utils"
 	"net/http"
-	"os"
 	"strings"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 )
 
 func ErrorMessage(w http.ResponseWriter, message string) {
 	response := make(map[string]interface{})
-	response = u.Message(false, message)
-	w.WriteHeader(http.StatusForbidden)
+	response = u.Message(http.StatusForbidden, message)
 	w.Header().Add("Content-Type", "application/json")
 	u.Respond(w, response)
 }
 
 var JwtAuthentication = func(next http.Handler) http.Handler {
+	cfg := config.GetConfig()
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -53,7 +53,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 		tk := &models.Token{}
 
 		token, err := jwt.ParseWithClaims(tokenPart, tk, func(token *jwt.Token) (interface{}, error) {
-			return []byte(os.Getenv("JWT_SECRET")), nil
+			return []byte(cfg.JWTSecret), nil
 		})
 
 		if err != nil { //Malformed token, returns with http code 403 as usual
