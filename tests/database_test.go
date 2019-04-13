@@ -19,10 +19,7 @@ func TestDatabase(t *testing.T) {
 	dbPort := cfg.DBPort
 	dbType := cfg.DBType
 
-	fmt.Println(cfg.DBPass)
-
 	dbUri := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", username, password, dbHost, dbPort, dbName)
-	fmt.Println(dbUri)
 
 	_, err := gorm.Open(dbType, dbUri)
 	if err != nil {
