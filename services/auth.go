@@ -3,9 +3,9 @@ package services
 import (
 	"context"
 	"fmt"
-	"github.com/abdullahi/feather-backend/config"
-	"github.com/abdullahi/feather-backend/models"
-	u "github.com/abdullahi/feather-backend/utils"
+	"github.com/featherr-engineering/rest-api/config"
+	"github.com/featherr-engineering/rest-api/models"
+	u "github.com/featherr-engineering/rest-api/utils"
 	"net/http"
 	"strings"
 

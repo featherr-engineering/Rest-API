@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/abdullahi/feather-backend/utils"
+	"github.com/featherr-engineering/rest-api/utils"
 	"net/http"
 )
 

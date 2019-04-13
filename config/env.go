@@ -30,7 +30,7 @@ var cfg *Config
 // Parse parses, validates and then returns the application
 // configuration based on ENV variables
 func init() {
-	if err := godotenv.Load("/Users/abdullahimahamed/go/src/github.com/abdullahi/feather-backend/.env"); err != nil {
+	if err := godotenv.Load("/Users/abdullahimahamed/go/src/github.com/featherr-engineering/rest-api/.env"); err != nil {
 		log.Warn("File .env not found, reading configuration from ENV")
 	}
 

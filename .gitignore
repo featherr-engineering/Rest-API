@@ -6,3 +6,4 @@
 # Misc
 .idea
 .DS_Store
+vendor/

@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	u "github.com/abdullahi/feather-backend/utils"
+	u "github.com/featherr-engineering/rest-api/utils"
 	"net/http"
 )
 

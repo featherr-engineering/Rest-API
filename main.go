@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/abdullahi/feather-backend/config"
-	"github.com/abdullahi/feather-backend/controllers"
-	"github.com/abdullahi/feather-backend/services"
+	"github.com/featherr-engineering/rest-api/config"
+	"github.com/featherr-engineering/rest-api/controllers"
+	"github.com/featherr-engineering/rest-api/services"
 	"github.com/gorilla/mux"
 	"net/http"
 )

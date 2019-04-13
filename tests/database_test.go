@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/abdullahi/feather-backend/config"
+	"github.com/featherr-engineering/rest-api/config"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"

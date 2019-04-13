@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/abdullahi/feather-backend/models"
-	u "github.com/abdullahi/feather-backend/utils"
+	"github.com/featherr-engineering/rest-api/models"
+	u "github.com/featherr-engineering/rest-api/utils"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	"net/http"
