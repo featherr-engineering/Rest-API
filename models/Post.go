@@ -29,9 +29,9 @@ type Post struct {
 	Category      string `gorm:"type:enum('#TBH','UNO CRASHES','Gaming','Fitness', 'Sports', 'Music','Movies','News','Conservative','Liberal','Business','Science and Engineering','Stories','Anonymous'); not null" json:"category"`
 	VotesCount    int    `json:"votesCount"`
 	CommentsCount int    `json:"commentsCount"`
-	Time          string `json:"time";sql:"DEFAULT:'0'"`
+	Time          string `json:"time" sql:"DEFAULT:'0'"`
 	Color         string `json:"color"`
-	Image         string `json:"image";sql:"DEFAULT:'null'"`
+	Image         string `json:"image" sql:"DEFAULT:'null'"`
 	User          User   `json:"user"`
 	UserID        string `json:"-"`
 	Votes         []Vote `json:"votes"`
