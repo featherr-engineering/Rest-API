@@ -12,7 +12,7 @@ import (
 	"net/http"
 )
 
-//GetPost
+//GetPost (get's one post record)
 var GetPost = func(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
@@ -35,7 +35,7 @@ var GetPost = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-//GetAllPosts
+//GetAllPosts (get's all post records)
 var GetAllPosts = func(w http.ResponseWriter, r *http.Request) {
 
 	data := models.GetPosts()
@@ -46,7 +46,7 @@ var GetAllPosts = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-//CreatePost
+//CreatePost (create new post record)
 var CreatePost = func(w http.ResponseWriter, r *http.Request) {
 	token := r.Context().Value("token").(*models.Token)
 	id := token.UserId

@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-//GetVote
+//GetVote (get one vote record)
 var GetVote = func(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["id"]
@@ -34,7 +34,7 @@ var GetVote = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-//GetAllVotes
+//GetAllVotes (get's all vote records)
 var GetAllVotes = func(w http.ResponseWriter, r *http.Request) {
 
 	data := models.GetVotes()
@@ -45,7 +45,7 @@ var GetAllVotes = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-//CreateVote
+//CreateVote (create new vote record)
 var CreateVote = func(w http.ResponseWriter, r *http.Request) {
 	token := r.Context().Value("token").(*models.Token)
 	id := token.UserId
