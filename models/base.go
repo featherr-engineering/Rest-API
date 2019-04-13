@@ -47,7 +47,7 @@ type GormModel struct {
 	ID        string     `gorm:"primary_key;type:varchar(255);" json:"id"`
 	CreatedAt time.Time  `json:"-"`
 	UpdatedAt time.Time  `json:"-"`
-	DeletedAt *time.Time `json:"-";sql:"index"`
+	DeletedAt *time.Time `json:"-" sql:"index"`
 }
 
 func (model *GormModel) BeforeCreate(scope *gorm.Scope) error {
