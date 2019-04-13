@@ -47,12 +47,12 @@ type GormModel struct {
 	ID        string     `gorm:"primary_key;type:varchar(255);" json:"id"`
 	CreatedAt time.Time  `json:"-"`
 	UpdatedAt time.Time  `json:"-"`
-	DeletedAt *time.Time `json:"-";sql:"index"`
+	DeletedAt *time.Time `json:"-" sql:"index"`
 }
 
 func (model *GormModel) BeforeCreate(scope *gorm.Scope) error {
 	fmt.Println("Base Before Create")
-	u1 := uuid.Must(uuid.NewV4())
+	u1 := uuid.Must(uuid.NewV4(), nil)
 	scope.SetColumn("ID", u1.String())
 	return nil
 }
