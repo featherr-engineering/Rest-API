@@ -52,7 +52,7 @@ type GormModel struct {
 
 func (model *GormModel) BeforeCreate(scope *gorm.Scope) error {
 	fmt.Println("Base Before Create")
-	u1 := uuid.Must(uuid.NewV4())
+	u1 := uuid.Must(uuid.NewV4(), nil)
 	scope.SetColumn("ID", u1.String())
 	return nil
 }
