@@ -4,8 +4,7 @@ workflows:
     jobs:
       - Init-Build
       - Now-Complete:
-          requires:
-            - Hold-For-Approval
+          type: approval
 
 
 
