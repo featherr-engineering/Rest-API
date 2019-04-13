@@ -1,10 +1,10 @@
 # Featherr Rest API
 
 
-- **CircleCI Build Status**
-    - [![CircleCI](https://circleci.com/gh/featherr-engineering/rest-api/tree/develop.svg?style=svg)](https://circleci.com/gh/featherr-engineering/rest-api/tree/develop)
-    
----    
+**CircleCI Build** [![CircleCI](https://circleci.com/gh/featherr-engineering/rest-api/tree/develop.svg?style=svg)](https://circleci.com/gh/featherr-engineering/rest-api/tree/develop)
+
+&nbsp;
+
 Golang rest api for Featherr mobile app. Repo contains src, and build. Using git flow for version control.
 
 
