@@ -12,7 +12,7 @@ version: 2.0
 jobs:
   Init-Build:
     docker:
-      - image: circleci/golang:1.12 #
+      - image: circleci/golang:1.12
       - image: tkuchiki/delayed-mysql
         environment:
           MYSQL_USER: root
@@ -21,7 +21,7 @@ jobs:
           MYSQL_DATABASE: featherr_test
 
     working_directory: /go/src/github.com/featherr-engineering/rest-api
-d
+
     steps:
       - checkout
       - run:
