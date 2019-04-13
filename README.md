@@ -1,6 +1,7 @@
 # Featherr Rest API
 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b8348fe4f754ab997e1babd77a7e8a2)](https://app.codacy.com/app/featherr-engineering/rest-api?utm_source=github.com&utm_medium=referral&utm_content=featherr-engineering/rest-api&utm_campaign=Badge_Grade_Dashboard)
 **CircleCI Build** [![CircleCI](https://circleci.com/gh/featherr-engineering/rest-api/tree/develop.svg?style=svg)](https://circleci.com/gh/featherr-engineering/rest-api/tree/develop)
 
 &nbsp;
